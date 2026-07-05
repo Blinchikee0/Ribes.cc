@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ribes — Run serious AI on your own machine</title>
+<meta name="description" content="Ribes is a marketplace and runtime for local AI models. One-click install, hardware-aware, sandboxed. Your GPU, your data — nothing leaves the desk."/>
+<meta property="og:title" content="Ribes — Run serious AI on your own machine"/>
+<meta property="og:description" content="A marketplace and runtime for local AI models. One-click install, sandboxed execution, zero cloud inference."/>
+<meta name="theme-color" content="#0b0712"/>
+<link rel="icon" type="image/png" href="assets/img/favicon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css"/>
+<noscript><style>#loader,#cursor,#cursor-ring{display:none!important}</style></noscript>
+</head>
+<body>
+
+<!-- ================= LOADER ================= -->
+<div id="loader" aria-hidden="true">
+  <div class="ld-center">
+    <div class="ld-mark">
+      <img src="assets/img/ribes-logo-256.png" alt="" width="72" height="72"/>
+      <span class="ld-orbit"></span>
+    </div>
+    <div class="ld-word">RIBES</div>
+    <div class="ld-status"><span id="ld-state">RESOLVING</span><span id="ld-pct">0</span></div>
+    <div class="ld-bar"><i id="ld-fill"></i></div>
+  </div>
+  <div class="ld-curtain c1"></div>
+  <div class="ld-curtain c2"></div>
+</div>
+
+<!-- custom cursor (desktop, fine pointers only) -->
+<div id="cursor" aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
+
+<!-- scroll progress -->
+<div id="progress" aria-hidden="true"><i></i></div>
+
+<!-- ambient background -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="gridlines" aria-hidden="true"></div>
+
+<!-- side dot navigation (desktop) -->
+<nav id="dots" aria-label="Section navigation">
+  <a href="#top" class="on" data-dot="top" data-cursor="hover"><span>Top</span></a>
+  <a href="#platform" data-dot="platform" data-cursor="hover"><span>Platform</span></a>
+  <a href="#models" data-dot="models" data-cursor="hover"><span>Store</span></a>
+  <a href="#architecture" data-dot="architecture" data-cursor="hover"><span>Stack</span></a>
+  <a href="#lifecycle" data-dot="lifecycle" data-cursor="hover"><span>Lifecycle</span></a>
+  <a href="#protocol" data-dot="protocol" data-cursor="hover"><span>Bridge</span></a>
+  <a href="#developers" data-dot="developers" data-cursor="hover"><span>Devs</span></a>
+  <a href="#download" data-dot="download" data-cursor="hover"><span>Get</span></a>
+</nav>
+
+<!-- edge details (desktop) -->
+<div id="side-label" aria-hidden="true">RIBES — LOCAL AI RUNTIME · YOUR GPU, YOUR DATA</div>
+<div id="scroll-pct" aria-hidden="true"><span id="pct-v">0</span>%</div>
+
+<!-- ================= NAV ================= -->
+<nav id="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top" data-cursor="hover">
+      <img src="assets/img/ribes-logo-256.png" alt="Ribes logo" width="30" height="30"/><b>Ribes</b>
+    </a>
+    <div class="nav-l">
+      <a href="#platform" data-cursor="hover">Platform</a>
+      <a href="#architecture" data-cursor="hover">Architecture</a>
+      <a href="#protocol" data-cursor="hover">Protocol</a>
+      <a href="#developers" data-cursor="hover">Developers</a>
+      <a href="#faq" data-cursor="hover">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <button class="pal-open" id="pal-open" data-cursor="hover" aria-label="Open quick navigation">JUMP<kbd>CTRL K</kbd></button>
+      <a class="btn btn-p btn-s magnetic" href="#download" data-cursor="hover"><span>Get Ribes</span></a>
+    </div>
+    <button id="nav-burger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</nav>
+<div id="mobile-menu" aria-hidden="true">
+  <a href="#platform">Platform</a><a href="#architecture">Architecture</a><a href="#lifecycle">Lifecycle</a>
+  <a href="#protocol">Protocol</a><a href="#developers">Developers</a><a href="#faq">FAQ</a><a href="#download">Download</a>
+</div>
+
+<!-- quick-jump palette (Ctrl+K) -->
+<div id="palette" aria-hidden="true">
+  <div class="pal-box">
+    <div class="pal-head"><input id="pal-input" type="text" placeholder="Jump to a section…" autocomplete="off" aria-label="Search sections"/><kbd>ESC</kbd></div>
+    <div class="pal-list" id="pal-list"></div>
+  </div>
+</div>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=2000&q=75" alt="" onerror="this.parentElement.remove()"/></div>
+  <canvas id="mesh" aria-hidden="true"></canvas>
+  <div class="hero-fade" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="emblem" data-hero="0">
+      <span class="ring"></span><span class="ring r2"></span><span class="ring r3"></span>
+      <img src="assets/img/ribes-logo.png" alt="Ribes interlocking-link mark"/>
+    </div>
+    <div class="pill" data-hero="1"><i></i>PUBLIC BETA · 1.4 — WINDOWS · MACOS · LINUX</div>
+    <h1>
+      <span class="l"><span data-hero="2">Run serious AI</span></span>
+      <span class="l"><span data-hero="3">on <em class="grad">your own machine.</em></span></span>
+    </h1>
+    <p class="sub" data-hero="4">Ribes is a marketplace and runtime for local AI models, built on the Steam model. Browse, install in one click, and run on your GPU — no cloud bill, no queue, and your prompts, images, and documents never leave the desk.</p>
+    <div class="hero-cta" data-hero="5">
+      <a class="btn btn-p magnetic" href="#download" data-cursor="hover">
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v13m0 0 5-5m-5 5-5-5M4 21h16"/></svg>
+        Download free</span>
+      </a>
+      <a class="btn btn-g magnetic" href="#platform" data-cursor="hover"><span>Explore the platform</span></a>
+    </div>
+    <div class="hero-note" data-hero="6">FREE FOR PERSONAL USE · LAUNCHER ≈ 28 MB — SO YOUR VRAM STAYS FOR MODELS</div>
+
+    <!-- product window (illustrative UI preview) -->
+    <div class="win-wrap" data-hero="7">
+      <div class="win-glow" aria-hidden="true"></div>
+      <div class="win" id="tilt-win">
+        <div class="win-bar">
+          <span class="wd"></span><span class="wd"></span><span class="wd"></span>
+          <span class="win-t">RIBES — LIBRARY / RUNTIME</span>
+          <span class="win-live"><i></i>LOCAL</span>
+        </div>
+        <div class="win-body">
+          <div class="wcol wcol-nav">
+            <div class="wlbl">Platform</div>
+            <div class="wnav"><i></i>Store</div>
+            <div class="wnav on"><i></i>Library</div>
+            <div class="wnav"><i></i>Runtime</div>
+            <div class="wnav"><i></i>Downloads</div>
+            <div class="wlbl" style="margin-top:14px">Create</div>
+            <div class="wnav"><i></i>Dev Sandbox</div>
+          </div>
+          <div class="wcol">
+            <div class="wlbl">Library · hardware-gate verdicts</div>
+            <div class="wcards">
+              <div class="wcard"><div class="wcv wcv1"></div><div class="wcb"><b>Text · LLM</b><span>Q4 quantization</span><span class="wfit ok">RUNNING · 42 TOK/S</span></div></div>
+              <div class="wcard"><div class="wcv wcv2"></div><div class="wcb"><b>Image · Diffusion</b><span>FP16 weights</span><span class="wfit">FITS · 10 GB VRAM</span></div></div>
+              <div class="wcard"><div class="wcv wcv3"></div><div class="wcb"><b>Speech · TTS</b><span>Q8 quantization</span><span class="wfit">FITS · 4 GB VRAM</span></div></div>
+              <div class="wcard"><div class="wcv wcv4"></div><div class="wcb"><b>Vision · CV</b><span>FP16 weights</span><span class="wfit warn">TIGHT · CPU-FALLBACK</span></div></div>
+            </div>
+          </div>
+          <div class="wcol">
+            <div class="wlbl">Live session · NVML telemetry</div>
+            <div class="wtok"><span id="wtps">42.6</span> <small>TOK/S</small></div>
+            <div class="wspark" id="wspark" aria-hidden="true"></div>
+            <div class="wmet"><div class="r"><span>VRAM</span><b id="wv">7.4 / 12 GB</b></div><div class="wg"><i id="wgv" style="width:61%"></i></div></div>
+            <div class="wmet"><div class="r"><span>GPU UTIL</span><b id="wu">87%</b></div><div class="wg b"><i id="wgu" style="width:87%"></i></div></div>
+            <div class="wmet wpriv"><div class="r"><span class="ok-dot">● EGRESS DENIED</span><b>0 B SENT</b></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="win-note">ILLUSTRATIVE UI PREVIEW</div>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span></span></div>
+</header>
+
+<!-- ================= MARQUEE ================= -->
+<div class="strip" aria-hidden="true">
+  <div class="marq">
+    <span class="s">Signed artifacts · verified publishers</span>
+    <span class="s">SHA-256 on every chunk</span>
+    <span class="s">Egress denied by default</span>
+    <span class="s">CUDA · ROCm · Metal · CPU</span>
+    <span class="s">Resumable chunked downloads</span>
+    <span class="s">VRAM-aware scheduler</span>
+    <span class="s">JSON-RPC 2.0 local bridge</span>
+    <span class="s">Delta updates · version rollback</span>
+    <span class="s">Signed artifacts · verified publishers</span>
+    <span class="s">SHA-256 on every chunk</span>
+    <span class="s">Egress denied by default</span>
+    <span class="s">CUDA · ROCm · Metal · CPU</span>
+    <span class="s">Resumable chunked downloads</span>
+    <span class="s">VRAM-aware scheduler</span>
+    <span class="s">JSON-RPC 2.0 local bridge</span>
+    <span class="s">Delta updates · version rollback</span>
+  </div>
+</div>
+
+<!-- ================= MANIFESTO ================= -->
+<section id="manifesto">
+  <div class="wrap">
+    <div class="mani-mark" aria-hidden="true"><img src="assets/img/ribes-logo.png" alt=""/></div>
+    <p class="mani" id="mani">Deploying a local model today demands DevOps skills — Python environments, CUDA versions, dependency roulette. <em>Ribes reduces all of it to Install&nbsp;→&nbsp;Launch</em>, taking on dependency resolution, process isolation, VRAM budgeting, and standardized status exchange.</p>
+    <div class="mani-src rv">— THE KEY THESIS OF THE RIBES ARCHITECTURE</div>
+  </div>
+</section>
+
+<!-- ================= PLATFORM ================= -->
+<section id="platform">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>Platform</div>
+      <h2>The launcher does the DevOps.<br/>You just run models.</h2>
+      <p class="lead">Every model on Ribes ships with a signed manifest. The launcher reads it, checks your hardware, builds an isolated environment, and supervises the process — so nothing is left to a README.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat card-fx rv" data-tilt>
+        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></div>
+        <h3>One-click install</h3>
+        <p>No Python, no CUDA hunting, no dependency hell. Ribes resolves an isolated environment per model with micromamba / uv, shares common base layers, and verifies every chunk by hash.</p>
+        <span class="f-num">01</span>
+      </div>
+      <div class="feat card-fx rv rv-d1" data-tilt>
+        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9zM4 10H2M4 14H2M22 10h-2M22 14h-2M10 4V2M14 4V2M10 22v-2M14 22v-2"/></svg></div>
+        <h3>Hardware compatibility gate</h3>
+        <p>Before you download a byte, the store checks the manifest against your real GPU, VRAM, RAM, and disk — and returns a plain verdict: <code>fits</code>, <code>tight</code>, or <code>cpu-fallback</code>.</p>
+        <span class="f-num">02</span>
+      </div>
+      <div class="feat card-fx rv rv-d2" data-tilt>
+        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Private by design</h3>
+        <p>Inference happens on your hardware. Network egress is denied by default; every permission a model wants is declared in its manifest and approved by you — explicitly.</p>
+        <span class="f-num">03</span>
+      </div>
+      <div class="feat card-fx rv" data-tilt>
+        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+        <h3>Live resource telemetry</h3>
+        <p>VRAM, GPU utilization, tokens per second, and structured logs — streamed from every running model over a local bridge in real time, sourced from NVML and OS counters.</p>
+        <span class="f-num">04</span>
+      </div>
+      <div class="feat card-fx rv rv-d1" data-tilt>
+        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="10" rx="1.5"/></svg></div>
+        <h3>A real library</h3>
+        <p>Delta updates, version rollback, file verification, and a VRAM-aware scheduler that never lets two models fight over the same memory — like a game launcher, for models.</p>
+        <span class="f-num">05</span>
+      </div>
+      <div class="feat card-fx rv rv-d2" data-tilt>
+        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 8 4 12 8 16"/><polyline points="16 8 20 12 16 16"/></svg></div>
+        <h3>UI even without a UI</h3>
+        <p>Models that ship no frontend still get one: Ribes generates a clean chat or console interface from the input/output schema the model declares in its manifest.</p>
+        <span class="f-num">06</span>
+      </div>
+    </div>
+
+    <!-- interactive: hardware gate simulator -->
+    <div class="gate rv" id="gate">
+      <div class="gate-info">
+        <div class="gate-k">INTERACTIVE — HARDWARE GATE</div>
+        <h3>Would it fit?</h3>
+        <p>Drag to your GPU's VRAM. The gate compares it with the example manifest from the SDK — <code>vram_min 8 GB</code>, <code>recommended 12 GB</code>, <code>cpu_fallback true</code> — exactly the check the launcher runs before a single byte downloads.</p>
+      </div>
+      <div class="gate-ctl">
+        <input type="range" id="gate-vram" min="2" max="24" step="1" value="12" aria-label="Your GPU VRAM in gigabytes"/>
+        <div class="gate-read"><span id="gate-gb">12</span> GB <small>VRAM</small></div>
+        <div class="gate-verdict ok" id="gate-verdict"><i></i><b>FITS</b><span>meets the recommended 12 GB</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MODEL TYPES (bento) ================= -->
+<section id="models">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>The store</div>
+      <h2>Every kind of local model,<br/>one storefront.</h2>
+      <p class="lead">The catalog filters by task type, required VRAM, license, price, and platform — and every card carries a compatibility verdict computed against your actual machine.</p>
+    </div>
+    <div class="bento">
+      <a href="#download" class="tile t-big card-fx rv" data-cursor="hover">
+        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1400&q=80" alt="Abstract visualization of artificial intelligence" loading="lazy" onerror="this.closest('.tile').classList.add('img-missing')"/>
+        <span class="tile-tint" aria-hidden="true"></span>
+        <div class="tile-body">
+          <span class="tile-tag">LLM</span>
+          <h3>Language models</h3>
+          <p>Chat and completion models with Q4 / Q8 / FP16 quantization variants published as separate downloads — take the one your VRAM actually fits.</p>
+        </div>
+      </a>
+      <div class="tile card-fx rv rv-d1" data-tilt>
+        <div class="tile-body"><span class="tile-tag">TTS</span><h3>Speech synthesis</h3><p>Voice models run entirely on-device — audio never leaves your machine.</p></div>
+      </div>
+      <div class="tile card-fx rv rv-d2" data-tilt>
+        <div class="tile-body"><span class="tile-tag">ASR</span><h3>Speech recognition</h3><p>Local transcription with live throughput metrics streamed over the bridge.</p></div>
+      </div>
+      <div class="tile card-fx rv rv-d1" data-tilt>
+        <div class="tile-body"><span class="tile-tag">CV</span><h3>Computer vision</h3><p>Detection and analysis pipelines with declared I/O schemas — Ribes builds the UI.</p></div>
+      </div>
+      <div class="tile card-fx rv rv-d2" data-tilt>
+        <div class="tile-body"><span class="tile-tag">EMBEDDINGS</span><h3>Embeddings</h3><p>Index and search your documents without an API key in sight.</p></div>
+      </div>
+      <a href="#download" class="tile t-wide card-fx rv" data-cursor="hover">
+        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1800&q=80" alt="Abstract holographic three-dimensional render" loading="lazy" onerror="this.closest('.tile').classList.add('img-missing')"/>
+        <span class="tile-tint" aria-hidden="true"></span>
+        <div class="tile-body">
+          <span class="tile-tag">DIFFUSION</span>
+          <h3>Image generation</h3>
+          <p>Diffusion models with author UIs rendered in a sandboxed webview — or a generated interface when none ships. The hardware gate tells you before install whether FP16 fits or the quantized variant is the honest choice.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ARCHITECTURE ================= -->
+<section id="architecture">
+  <div class="sec-bg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2000&q=70" alt="" loading="lazy" onerror="this.parentElement.remove()"/></div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>Architecture</div>
+      <h2>Four layers. One contract.</h2>
+      <p class="lead">Chosen for minimal memory overhead — every megabyte the launcher eats is taken from the model — and for single-binary operations. The Rust core is the single source of truth for all state.</p>
+    </div>
+    <div class="arch">
+      <div class="arch-row card-fx rv" data-tilt>
+        <div class="arch-no">L1</div>
+        <div class="arch-main">
+          <h3>Marketplace <small>· cloud</small></h3>
+          <p>Catalog, identity, payments, artifact hosting, versioning, and revenue share. Weights are served from S3-compatible storage behind a CDN with ranged, resumable HTTP — the API layer never becomes a traffic bottleneck.</p>
+        </div>
+        <div class="arch-tags"><span>Go</span><span>gRPC / WebSocket</span><span>PostgreSQL</span><span>Redis Pub/Sub</span><span>S3 + CDN</span></div>
+      </div>
+      <div class="arch-link" aria-hidden="true"><i></i></div>
+      <div class="arch-row card-fx rv" data-tilt>
+        <div class="arch-no">L2</div>
+        <div class="arch-main">
+          <h3>Launcher <small>· desktop client</small></h3>
+          <p>A Tauri shell — native system webview instead of a bundled Chromium, so tens of megabytes of RAM, not hundreds. The long-running Rust + Tokio daemon downloads, verifies, provisions, supervises, and collects metrics without GC pauses.</p>
+        </div>
+        <div class="arch-tags"><span>Tauri</span><span>Rust + Tokio</span><span>React + TypeScript</span><span>SQLite</span></div>
+      </div>
+      <div class="arch-link" aria-hidden="true"><i></i></div>
+      <div class="arch-row card-fx rv" data-tilt>
+        <div class="arch-no">L3</div>
+        <div class="arch-main">
+          <h3>Execution engine <small>· sandbox</small></h3>
+          <p>Process-level isolation with managed Python environments: direct GPU access with no container layer in the hot path, shared torch/CUDA base layers between models, and guaranteed kill-tree via Job Objects and cgroups.</p>
+        </div>
+        <div class="arch-tags"><span>micromamba / uv</span><span>NVML</span><span>Job Objects / cgroups</span><span>VRAM scheduler</span></div>
+      </div>
+      <div class="arch-link" aria-hidden="true"><i></i></div>
+      <div class="arch-row card-fx rv" data-tilt>
+        <div class="arch-no">L4</div>
+        <div class="arch-main">
+          <h3>SDK <small>· developer standard</small></h3>
+          <p>One declarative manifest plus an entrypoint that speaks the bridge protocol. It defines the contract that makes any AI project a predictable, installable artifact for the launcher.</p>
+        </div>
+        <div class="arch-tags"><span>ribes.manifest.json</span><span>entrypoint contract</span><span>JSON-RPC 2.0</span><span>io_schema</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LIFECYCLE (horizontal) ================= -->
+<section id="lifecycle">
+  <div class="lc-bg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=2000&q=75" alt="" loading="lazy" onerror="this.parentElement.remove()"/></div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>Lifecycle</div>
+      <h2>Seven states. One source of truth.</h2>
+      <p class="lead">Every transition lives in the Rust core and is broadcast to the UI, the cloud, and the model process — so nothing ever drifts out of sync.</p>
+    </div>
+    <div class="lc-flow" id="lc-flow">
+      <span class="lc-line" aria-hidden="true"><span id="lc-line-fill"></span></span>
+      <div class="lc-item">
+        <div class="lc-node"><span class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span></div>
+        <article class="lc-card card-fx">
+          <div class="lc-no">01</div>
+          <h3>Resolving</h3><p>The manifest arrives and the hardware gate runs: VRAM, RAM, disk, GPU vendor, and compute capability are checked against requirements before a single byte downloads.</p><span class="lc-tag">HARDWARE GATE</span>
+        </article>
+      </div>
+      <div class="lc-item">
+        <div class="lc-node"><span class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0 5-5m-5 5-5-5M4 21h16"/></svg></span></div>
+        <article class="lc-card card-fx">
+          <div class="lc-no">02</div>
+          <h3>Downloading</h3><p>Chunked, resumable delivery from the CDN over parallel streams. Every chunk is verified against its SHA-256 before it is written into place; shared chunks are skipped via the dedup cache.</p><span class="lc-tag">SHA-256 · RESUMABLE</span>
+        </article>
+      </div>
+      <div class="lc-item">
+        <div class="lc-node"><span class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 9 5-9 5-9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg></span></div>
+        <article class="lc-card card-fx">
+          <div class="lc-no">03</div>
+          <h3>Provisioning</h3><p>An isolated environment is built from the manifest with micromamba / uv. Base layers are reused — the second model installs far faster than the first.</p><span class="lc-tag">SHARED LAYERS</span>
+        </article>
+      </div>
+      <div class="lc-item">
+        <div class="lc-node"><span class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span></div>
+        <article class="lc-card card-fx">
+          <div class="lc-no">04</div>
+          <h3>Registered</h3><p>The model and its environment are recorded in the local SQLite database — the offline source of truth for your library — and appear ready to launch.</p><span class="lc-tag">SQLITE</span>
+        </article>
+      </div>
+      <div class="lc-item">
+        <div class="lc-node"><span class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 4 14 8-14 8z"/></svg></span></div>
+        <article class="lc-card card-fx">
+          <div class="lc-no">05</div>
+          <h3>Launching</h3><p>The scheduler confirms free resources, a sandboxed session is created with process limits, and the entrypoint is spawned. The IPC handshake opens the control channel.</p><span class="lc-tag">SANDBOX · IPC</span>
+        </article>
+      </div>
+      <div class="lc-item">
+        <div class="lc-node"><span class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span></div>
+        <article class="lc-card card-fx">
+          <div class="lc-no">06</div>
+          <h3>Running</h3><p>The model reports ready, its UI becomes available, and metrics and logs stream live. System metrics are sampled independently by PID — even a silent model is monitored.</p><span class="lc-tag">LIVE TELEMETRY</span>
+        </article>
+      </div>
+      <div class="lc-item">
+        <div class="lc-node"><span class="lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg></span></div>
+        <article class="lc-card card-fx">
+          <div class="lc-no">07</div>
+          <h3>Stopping</h3><p>Graceful shutdown with a deadline, then a forced kill of the whole process tree via Job Objects or cgroups. Every byte of VRAM is guaranteed to come back.</p><span class="lc-tag">KILL-TREE</span>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW ================= -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>How it works</div>
+      <h2>From storefront to first token<br/>in three steps.</h2>
+    </div>
+    <div class="how">
+      <div class="step card-fx rv" data-tilt>
+        <figure class="duo duo-s"><img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=900&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><span class="duo-tint" aria-hidden="true"></span></figure>
+        <div class="n">STEP 01 — RESOLVE</div>
+        <h3>Pick a model</h3>
+        <p>Browse the store by task — LLM, image generation, TTS, ASR, CV, embeddings — with filters for VRAM, license, price, and platform. The verdict is computed locally against your real hardware profile.</p>
+      </div>
+      <div class="step card-fx rv rv-d1" data-tilt>
+        <figure class="duo duo-s"><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=900&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><span class="duo-tint" aria-hidden="true"></span></figure>
+        <div class="n">STEP 02 — PROVISION</div>
+        <h3>Install in one click</h3>
+        <p>The backend returns a signed download plan: content-addressed chunks with hashes and CDN URLs. Weights arrive as verified, resumable chunks and the sandboxed environment is built from the manifest.</p>
+      </div>
+      <div class="step card-fx rv rv-d2" data-tilt>
+        <figure class="duo duo-s"><img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=900&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><span class="duo-tint" aria-hidden="true"></span></figure>
+        <div class="n">STEP 03 — RUN</div>
+        <h3>Launch and watch it live</h3>
+        <p>The launcher spawns the model in isolation, opens the local bridge, and streams status, logs, and metrics. One button stops it — and frees every byte of VRAM.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SILICON WALL ================= -->
+<div class="wall" aria-hidden="true">
+  <div class="wall-track">
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>CUDA · ROCM · METAL</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>EGRESS DENIED</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>SHA-256 VERIFIED</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>NVML TELEMETRY</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>VRAM-AWARE</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>SANDBOXED</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>CUDA · ROCM · METAL</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>EGRESS DENIED</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>SHA-256 VERIFIED</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>NVML TELEMETRY</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>VRAM-AWARE</figcaption></figure>
+    <figure class="wall-item"><img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" onerror="this.closest('figure').classList.add('img-missing')"/><figcaption>SANDBOXED</figcaption></figure>
+  </div>
+</div>
+
+<!-- ================= COMPARE ================= -->
+<section id="compare">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>Local vs cloud</div>
+      <h2>The honest trade.</h2>
+      <p class="lead">Cloud inference still makes sense when you need scale beyond your own hardware. For everything else, the economics point at the GPU already under your desk.</p>
+    </div>
+    <div class="cmp">
+      <div class="cmp-col card-fx rv" data-tilt>
+        <div class="cmp-head"><span class="cmp-k">CLOUD API</span><h3>Renting inference</h3></div>
+        <ul>
+          <li class="no">Billed per token or GPU-hour, forever</li>
+          <li class="no">Prompts and files leave your machine</li>
+          <li class="no">Queues and rate limits at peak hours</li>
+          <li class="yes">Scales beyond your own hardware</li>
+        </ul>
+      </div>
+      <div class="cmp-col on card-fx rv rv-d1" data-tilt>
+        <div class="cmp-head"><span class="cmp-k">RIBES</span><h3>Owning inference</h3></div>
+        <ul>
+          <li class="yes">Runs on hardware you already own — no per-token cost</li>
+          <li class="yes">Data never leaves the machine; egress denied by default</li>
+          <li class="yes">No queue — your GPU answers to you alone</li>
+          <li class="no">Bounded by your VRAM — the hardware gate tells you before install</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROTOCOL ================= -->
+<section id="protocol">
+  <div class="wrap">
+    <div class="proto-grid">
+      <div class="proto-copy">
+        <div class="sec-head rv">
+          <div class="eyebrow"><i></i>Ribes Bridge</div>
+          <h2>A protocol, not a port scan.</h2>
+          <p class="lead">The core and each model process talk over JSON-RPC 2.0 on a Unix domain socket or named pipe — no open TCP ports, invisible to the network, faster than localhost HTTP. Logs travel on a second channel: structured JSON lines with raw stdout/stderr captured as a fallback.</p>
+        </div>
+        <ul class="proto-msgs rv">
+          <li><code>ready</code><span class="dir">model → core</span><span>UI type, UI address, declared I/O schema</span></li>
+          <li><code>status</code><span class="dir">model → core</span><span>loading · warming · idle · busy · error</span></li>
+          <li><code>progress</code><span class="dir">model → core</span><span>weights loading into VRAM, 0–100</span></li>
+          <li><code>metric</code><span class="dir">model → core</span><span>tokens/s, iterations/s, queue depth</span></li>
+          <li><code>log</code><span class="dir">model → core</span><span>structured level + message</span></li>
+          <li><code>request_input</code><span class="dir">model → core</span><span>ask the user for data (generated UI)</span></li>
+          <li><code>output</code><span class="dir">model → core</span><span>inference result (generated UI)</span></li>
+          <li><code>shutdown</code><span class="dir">core → model</span><span>graceful stop with a deadline</span></li>
+          <li><code>cancel</code><span class="dir">core → model</span><span>abort the current inference task</span></li>
+        </ul>
+      </div>
+      <div class="term-wrap rv">
+        <div class="term" id="term">
+          <div class="term-bar"><span class="wd"></span><span class="wd"></span><span class="wd"></span><span class="term-t">ribes-core — bridge session</span><span class="win-live"><i></i>LIVE</span></div>
+          <pre class="term-body" id="term-body" aria-live="off"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECURITY ================= -->
+<section id="security">
+  <div class="sec-bg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=2000&q=70" alt="" loading="lazy" onerror="this.parentElement.remove()"/></div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>Security</div>
+      <h2>Untrusted code, treated as untrusted.</h2>
+      <p class="lead">A model is arbitrary code on your machine. Ribes assumes exactly that — and layers its defenses instead of hoping.</p>
+    </div>
+    <div class="sec-grid">
+      <div class="sec-card card-fx rv" data-tilt>
+        <div class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.4 18.4A9 9 0 0 1 5.6 5.6m2.4-1.8A9 9 0 0 1 20.2 16M2 2l20 20"/></svg></div>
+        <h3>Egress denied by default</h3><p>Outbound connections from a model are blocked unless declared in the manifest and approved by you.</p>
+      </div>
+      <div class="sec-card card-fx rv rv-d1" data-tilt>
+        <div class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg></div>
+        <h3>Sandboxed processes</h3><p>Each model sees only its working directory; the shared weight cache mounts read-only. Memory limits are enforced by Job Objects and cgroups.</p>
+      </div>
+      <div class="sec-card card-fx rv rv-d2" data-tilt>
+        <div class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Signed artifacts</h3><p>Publishers are verified; artifacts are signed with the developer's key and every weight file carries a SHA-256 in the manifest.</p>
+      </div>
+      <div class="sec-card card-fx rv" data-tilt>
+        <div class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4"/></svg></div>
+        <h3>Permission manifest</h3><p>Network, filesystem paths outside the sandbox, multi-GPU — every capability is declared up front and granted explicitly.</p>
+      </div>
+      <div class="sec-card card-fx rv rv-d1" data-tilt>
+        <div class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8m-4-3v3"/></svg></div>
+        <h3>Isolated third-party UI</h3><p>Author-shipped web UIs render in a separate webview container with strict CSP, controlled egress, and no launcher API beyond granted permissions.</p>
+      </div>
+      <div class="sec-card card-fx rv rv-d2" data-tilt>
+        <div class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></div>
+        <h3>Guaranteed kill-switch</h3><p>Stop sends a graceful shutdown with a deadline, then kills the entire process tree. VRAM is released — the system never hangs on a zombie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ENGINEERING HONESTY ================= -->
+<section id="honesty">
+  <div class="sec-bg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=2000&q=70" alt="" loading="lazy" onerror="this.parentElement.remove()"/></div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>Engineering honesty</div>
+      <h2>We design around<br/>our own bottlenecks.</h2>
+      <p class="lead">The Ribes architecture document names its three hardest problems in print. None of them can be eliminated outright — so each is held in check by design.</p>
+    </div>
+    <div class="risk-grid">
+      <div class="risk card-fx rv" data-tilt>
+        <span class="risk-no">RISK 01</span>
+        <h3>Untrusted code</h3>
+        <p>A model is arbitrary Python running on your machine. Process-level isolation alone is not a complete defense.</p>
+        <div class="risk-mit"><b>Held in check by</b><span>Publisher verification</span><span>Artifact signing</span><span>Permission manifest</span><span>Static package scans</span><span>Optional micro-VM tier</span><span>Egress closed by default</span></div>
+      </div>
+      <div class="risk card-fx rv rv-d1" data-tilt>
+        <span class="risk-no">RISK 02</span>
+        <h3>GPU isolation</h3>
+        <p>Consumer operating systems offer no true VRAM isolation — two models can overrun memory and hang the system.</p>
+        <div class="risk-mit"><b>Held in check by</b><span>VRAM-aware scheduler</span><span>One GPU model at a time</span><span>Strict budget accounting</span><span>System memory reserve</span><span>Guaranteed kill-tree</span></div>
+      </div>
+      <div class="risk card-fx rv rv-d2" data-tilt>
+        <span class="risk-no">RISK 03</span>
+        <h3>The weight of weights</h3>
+        <p>Model weights run to tens of gigabytes — expensive to distribute and slow to install.</p>
+        <div class="risk-mit"><b>Held in check by</b><span>Content-addressed chunks</span><span>Deduplication</span><span>Delta updates</span><span>Quantization variants</span><span>P2P distribution tier</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLIENT TOUR ================= -->
+<section id="client">
+  <div class="sec-bg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=70" alt="" loading="lazy" onerror="this.parentElement.remove()"/></div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>Inside the client</div>
+      <h2>Five surfaces, one rail.</h2>
+    </div>
+    <div class="tour rv">
+      <div class="tour-tabs" role="tablist" aria-label="Client sections">
+        <button class="on" role="tab" aria-selected="true" data-tab="0">Store</button>
+        <button role="tab" aria-selected="false" data-tab="1">Library</button>
+        <button role="tab" aria-selected="false" data-tab="2">Runtime</button>
+        <button role="tab" aria-selected="false" data-tab="3">Dev Sandbox</button>
+        <button role="tab" aria-selected="false" data-tab="4">Settings</button>
+      </div>
+      <div class="tour-panels">
+        <div class="tour-panel on" role="tabpanel">
+          <h3>Store</h3>
+          <p>A grid of model cards — publisher, rating, weight size, price, and a VRAM badge — with filters for task type, required VRAM, license, price, and platform. Detail pages show version history, changelogs, reviews, and a compatibility block computed against your machine.</p>
+          <div class="tour-facts"><span>Compatibility badge before install</span><span>Download size + final disk footprint</span><span>Q4 / Q8 / FP16 quantization variants</span></div>
+        </div>
+        <div class="tour-panel" role="tabpanel">
+          <h3>Library</h3>
+          <p>Installed models with status badges — Installed, Update available, Running, Broken — plus disk usage, version, and last launch. Launch, stop, update, roll back, verify files, or uninstall from one place.</p>
+          <div class="tour-facts"><span>Delta updates</span><span>Version rollback</span><span>Environment health indicator</span></div>
+        </div>
+        <div class="tour-panel" role="tabpanel">
+          <h3>Model Runtime</h3>
+          <p>The model's own interface — an author web UI in a sandboxed webview, or a Ribes-generated chat/console — with a live side panel: VRAM, GPU utilization, process RAM and CPU, throughput, and a structured log console.</p>
+          <div class="tour-facts"><span>NVML + OS counters</span><span>Stop with guaranteed VRAM release</span><span>Metrics sampled even if the model is silent</span></div>
+        </div>
+        <div class="tour-panel" role="tabpanel">
+          <h3>Dev Sandbox</h3>
+          <p>Point Ribes at a local model folder: a live manifest linter highlights schema errors, missing dependencies, and port conflicts. Dev mode runs the exact production execution path from source — then Package &amp; Publish chunks, hashes, signs, and uploads.</p>
+          <div class="tour-facts"><span>Manifest linter with dry-run resolve</span><span>Hot-reload dev runs</span><span>One-click publish pipeline</span></div>
+        </div>
+        <div class="tour-panel" role="tabpanel">
+          <h3>Global Settings</h3>
+          <p>Storage paths and disk limits, VRAM/RAM reserves for the system, concurrent model limits, GPU selection and backend mode, bandwidth caps, base runtime management, opt-in telemetry, and per-model egress policies.</p>
+          <div class="tour-facts"><span>System VRAM reserve feeds the hardware gate</span><span>CUDA · ROCm · DirectML · Metal · CPU</span><span>Telemetry is opt-in</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEVELOPERS ================= -->
+<section id="developers">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>For developers</div>
+      <h2>Ship a model, not an installer.</h2>
+      <p class="lead">Declare your runtime, hardware needs, and permissions in one manifest. Ribes handles distribution, payments, environments, and the “wrong CUDA” tickets you never wanted — and since inference runs on the user's GPU, your cloud bill for their usage is zero.</p>
+    </div>
+    <div class="dev-grid">
+      <div class="dev-code rv" data-tilt>
+        <div class="code-bar"><span class="wd"></span><span class="wd"></span><span class="wd"></span>
+          <div class="dev-tabs">
+            <button class="on" data-pane="0" data-cursor="hover">ribes.manifest.json</button>
+            <button data-pane="1" data-cursor="hover">package layout</button>
+            <button data-pane="2" data-cursor="hover">entrypoint.py</button>
+          </div>
+          <button class="code-copy" id="code-copy" data-cursor="hover" aria-label="Copy the active code panel">COPY</button>
+        </div>
+<pre class="code dev-pane on"><span class="c-p">{</span>
+  <span class="c-k">"sdk_version"</span>: <span class="c-s">"1.0"</span>,
+  <span class="c-k">"identity"</span>: <span class="c-p">{</span>
+    <span class="c-k">"id"</span>: <span class="c-s">"acme.llama-vision"</span>,
+    <span class="c-k">"name"</span>: <span class="c-s">"Llama-Vision 8B"</span>,
+    <span class="c-k">"version"</span>: <span class="c-s">"1.2.0"</span>,
+    <span class="c-k">"license"</span>: <span class="c-s">"apache-2.0"</span>
+  <span class="c-p">}</span>,
+  <span class="c-k">"runtime"</span>: <span class="c-p">{</span> <span class="c-k">"python"</span>: <span class="c-s">"3.11"</span>, <span class="c-k">"entrypoint"</span>: <span class="c-s">"python entrypoint.py"</span> <span class="c-p">}</span>,
+  <span class="c-k">"hardware"</span>: <span class="c-p">{</span>
+    <span class="c-k">"vram_min_mb"</span>: <span class="c-n">8192</span>,
+    <span class="c-k">"vram_recommended_mb"</span>: <span class="c-n">12288</span>,
+    <span class="c-k">"gpu_vendor"</span>: <span class="c-p">[</span><span class="c-s">"nvidia"</span>, <span class="c-s">"amd"</span><span class="c-p">]</span>,
+    <span class="c-k">"cpu_fallback"</span>: <span class="c-n">true</span>
+  <span class="c-p">}</span>,
+  <span class="c-k">"permissions"</span>: <span class="c-p">{</span> <span class="c-k">"network_egress"</span>: <span class="c-n">false</span> <span class="c-p">}</span>,
+  <span class="c-k">"artifacts"</span>: <span class="c-p">[{</span> <span class="c-k">"path"</span>: <span class="c-s">"weights/model.safetensors"</span>, <span class="c-k">"sha256"</span>: <span class="c-s">"a1b2c3…"</span> <span class="c-p">}]</span>
+<span class="c-p">}</span></pre>
+<pre class="code dev-pane"><span class="c-k">my-model/</span>
+├── ribes.manifest.json      <span class="c-p"># launcher contract (required)</span>
+├── entrypoint.py            <span class="c-p"># boots the IPC bridge</span>
+├── requirements/
+│   ├── cuda.txt
+│   ├── rocm.txt
+│   └── cpu.txt
+├── weights/
+│   └── model.safetensors    <span class="c-p"># chunked + hashed at publish</span>
+├── ui/                      <span class="c-p"># optional author web UI</span>
+│   └── index.html
+└── ribes_sdk/               <span class="c-p"># thin bridge client</span></pre>
+<pre class="code dev-pane"><span class="c-k">from</span> ribes_sdk <span class="c-k">import</span> Bridge
+
+bridge = Bridge.connect()      <span class="c-p"># socket address from launcher env</span>
+model  = load_model()          <span class="c-p"># weights live in ./weights</span>
+
+bridge.status(<span class="c-s">"warming"</span>)
+bridge.ready(ui_type=<span class="c-s">"web"</span>,
+             ui_url=<span class="c-s">"http://127.0.0.1:7860"</span>)
+
+<span class="c-n">@bridge.on_request</span>
+<span class="c-k">def</span> handle(req):
+    bridge.metric(tokens_per_sec=...)
+    <span class="c-k">return</span> model.infer(req.inputs)
+
+bridge.serve()                 <span class="c-p"># blocks until shutdown</span></pre>
+      </div>
+      <div class="dev-side">
+        <div class="dev-point rv"><b>Distribution &amp; monetization built in</b><p>Payments, licensing, CDN hosting for multi-gigabyte weights, and launch analytics — one-time sales and subscriptions with revenue share, free and open-source publishing with optional donations, or private B2B catalogs.</p></div>
+        <div class="dev-point rv rv-d1"><b>Zero environment support burden</b><p>“torch won't install / wrong CUDA” stops being your problem. Provisioning is guaranteed by the launcher from your manifest — the same execution path in dev mode and production.</p></div>
+        <div class="dev-point rv rv-d2"><b>A standard contract</b><p>One <code>manifest.json</code> and an entrypoint that connects the bridge, sends <code>ready</code>, and serves requests — instead of a hand-rolled installer and a 40-step README.</p></div>
+        <div class="dev-point rv rv-d3"><b>No cloud bill for usage</b><p>Inference runs on the user's hardware. The platform takes no commission on compute — there is none to take.</p></div>
+        <div class="hero-cta dev-cta rv rv-d3">
+          <a class="btn btn-g magnetic" href="#" data-cursor="hover"><span>Read the SDK docs</span></a>
+          <a class="btn btn-g magnetic" href="#" data-cursor="hover"><span>Publisher program</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq">
+  <div class="wrap wrap-n">
+    <div class="sec-head rv">
+      <div class="eyebrow"><i></i>FAQ</div>
+      <h2>The honest engineering answers.</h2>
+    </div>
+    <div class="faq rv">
+      <details class="qa">
+        <summary data-cursor="hover"><span>Why Tauri instead of Electron?</span><i></i></summary>
+        <div class="qa-a"><p>Electron ships its own Chromium — 150–300+ MB of RAM per process. When the goal is to leave maximum VRAM and RAM to the model, that overhead is unacceptable. Tauri uses the system webview (WebView2 on Windows, WebKit on macOS/Linux), and all heavy logic — supervision, IPC, monitoring — lives in a Rust core with no GC pauses.</p></div>
+      </details>
+      <details class="qa">
+        <summary data-cursor="hover"><span>Why not just use Docker containers?</span><i></i></summary>
+        <div class="qa-a"><p>On consumer Windows and macOS, full containers make GPU passthrough painful — WSL2, NVIDIA runtime forwarding — and add weight. The default is process-level isolation with managed Python environments built by micromamba / uv: direct GPU access, shared base layers, and a wheel cache. An optional container or micro-VM tier exists for untrusted or heavy cases.</p></div>
+      </details>
+      <details class="qa">
+        <summary data-cursor="hover"><span>What data leaves my machine?</span><i></i></summary>
+        <div class="qa-a"><p>During inference — nothing. Prompts, images, and documents stay local. A model's outbound network access is denied by default and only opens if its manifest declares the permission and you approve it. Launcher telemetry is opt-in.</p></div>
+      </details>
+      <details class="qa">
+        <summary data-cursor="hover"><span>What stops two models from crashing my GPU?</span><i></i></summary>
+        <div class="qa-a"><p>Consumer operating systems have no real VRAM isolation, so Ribes arbitrates: the VRAM-aware scheduler runs one GPU model at a time by default, keeps strict budget accounting from the hardware gate, and reserves memory for your system. If anything goes wrong, kill-tree via Job Objects or cgroups guarantees the memory comes back.</p></div>
+      </details>
+      <details class="qa">
+        <summary data-cursor="hover"><span>Weights are tens of gigabytes. How is that manageable?</span><i></i></summary>
+        <div class="qa-a"><p>Content-addressed chunks with deduplication — weights shared between models download once. Updates ship as deltas, quantization variants (Q4 / Q8 / FP16) are separate downloads, and every transfer is ranged and resumable, verified chunk by chunk against SHA-256.</p></div>
+      </details>
+      <details class="qa">
+        <summary data-cursor="hover"><span>What exactly does a developer have to ship?</span><i></i></summary>
+        <div class="qa-a"><p>A package with <code>ribes.manifest.json</code>, an entrypoint that connects the SDK bridge, per-platform dependency files (cuda / rocm / cpu), and the weights — which are chunked and hashed at publish. A web UI is optional: declare an I/O schema and Ribes generates the interface.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MARQUEE 2 ================= -->
+<div class="strip" aria-hidden="true">
+  <div class="marq m2">
+    <span class="s">One manifest · one entrypoint</span>
+    <span class="s">Revenue share on paid models</span>
+    <span class="s">Optional donations for open source</span>
+    <span class="s">Private B2B catalogs</span>
+    <span class="s">CDN for multi-gigabyte weights</span>
+    <span class="s">Launch analytics for publishers</span>
+    <span class="s">Generated UI from io_schema</span>
+    <span class="s">Dev mode = production execution path</span>
+    <span class="s">One manifest · one entrypoint</span>
+    <span class="s">Revenue share on paid models</span>
+    <span class="s">Optional donations for open source</span>
+    <span class="s">Private B2B catalogs</span>
+    <span class="s">CDN for multi-gigabyte weights</span>
+    <span class="s">Launch analytics for publishers</span>
+    <span class="s">Generated UI from io_schema</span>
+    <span class="s">Dev mode = production execution path</span>
+  </div>
+</div>
+
+<!-- ================= DOWNLOAD ================= -->
+<section id="download">
+  <div class="wrap">
+    <div class="sec-head dl-head rv">
+      <div class="eyebrow eyebrow-c"><i></i>Download</div>
+      <h2>Get Ribes for your desktop.</h2>
+      <p class="lead">Free for personal use. About 28 MB — the launcher stays small so your models don't have to.</p>
+    </div>
+    <div class="dl-grid">
+      <div class="dl-card card-fx rv detected" data-tilt data-os="win">
+        <span class="rec">DETECTED FOR YOU</span>
+        <div class="os-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.5 4.4v7.1H3zM3 12.5h7.5v7.1L3 18.5zM11.5 4.2 21 3v8.5h-9.5zM11.5 12.5H21V21l-9.5-1.2z"/></svg></div>
+        <h3>Windows</h3>
+        <div class="req">WINDOWS 10/11 · X64 · WEBVIEW2</div>
+        <a class="dl-btn magnetic" href="SetupRibes.exe" download="SetupRibes.exe" data-cursor="hover">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v13m0 0 5-5m-5 5-5-5M4 21h16"/></svg>Download .exe</span>
+        </a>
+        <a class="dl-alt" href="SetupRibes.exe" download="SetupRibes.exe" data-cursor="hover">Direct download · SetupRibes.exe</a>
+      </div>
+      <div class="dl-card card-fx rv rv-d1 dl-soon" data-os="mac">
+        <div class="os-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.8-2-1.6-.2-3.1 1-3.9 1s-2-1-3.4-1c-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.4-.8s2 .8 3.4.8 2.3-1.2 3.1-2.5c1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.7-4.1zM13.7 4.6c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.7.7-1.3 2-1.1 3.2 1.1.1 2.3-.6 3-1.5z"/></svg></div>
+        <h3>macOS</h3>
+        <div class="req">MACOS 13+ · APPLE SILICON &amp; INTEL</div>
+        <a class="dl-btn magnetic" href="https://get.ribes.app/Ribes-1.4.2-universal.dmg" download data-cursor="hover">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v13m0 0 5-5m-5 5-5-5M4 21h16"/></svg>Download .dmg</span>
+        </a>
+        <a class="dl-alt" href="#" data-cursor="hover">Or: brew install --cask ribes</a>
+      </div>
+      <div class="dl-card card-fx rv rv-d2 dl-soon" data-os="linux">
+        <div class="os-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c-2.2 0-3.5 1.6-3.5 4 0 1.6-.6 2.8-1.5 4-1.2 1.6-2.5 3.3-2.5 5.7 0 1.6.7 2.9 1.8 3.6.6-1 1.7-1.6 3-1.3.8.2 1.8.5 2.7.5s1.9-.3 2.7-.5c1.3-.3 2.4.3 3 1.3 1.1-.7 1.8-2 1.8-3.6 0-2.4-1.3-4.1-2.5-5.7-.9-1.2-1.5-2.4-1.5-4 0-2.4-1.3-4-3.5-4z"/><circle cx="10" cy="8.5" r=".9" fill="currentColor" stroke="none"/><circle cx="14" cy="8.5" r=".9" fill="currentColor" stroke="none"/></svg></div>
+        <h3>Linux</h3>
+        <div class="req">UBUNTU 22.04+ · FEDORA 39+ · X64</div>
+        <a class="dl-btn magnetic" href="https://get.ribes.app/Ribes-1.4.2-x86_64.AppImage" download data-cursor="hover">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v13m0 0 5-5m-5 5-5-5M4 21h16"/></svg>Download .AppImage</span>
+        </a>
+        <a class="dl-alt" href="https://get.ribes.app/ribes_1.4.2_amd64.deb" data-cursor="hover">.deb · .rpm · flatpak</a>
+      </div>
+    </div>
+    <div class="dl-meta rv">V1.4.2 · SHA-256 CHECKSUMS &amp; SIGNATURES — <a href="#" data-cursor="hover">RELEASE NOTES</a> · <a href="#" data-cursor="hover">ALL VERSIONS</a></div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section id="cta">
+  <div class="wrap">
+    <div class="cta-box rv">
+      <div class="cta-bg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1800&q=75" alt="" loading="lazy" onerror="this.parentElement.remove()"/></div>
+      <div class="cta-glow" aria-hidden="true"></div>
+      <h2>Your GPU is already<br/><em class="grad">good enough.</em></h2>
+      <p class="lead">Stop renting intelligence by the token. Install Ribes and put the silicon on your desk to work.</p>
+      <div class="hero-cta">
+        <a class="btn btn-p magnetic" href="#download" data-cursor="hover">
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v13m0 0 5-5m-5 5-5-5M4 21h16"/></svg>Download free</span>
+        </a>
+        <a class="btn btn-g magnetic" href="#developers" data-cursor="hover"><span>Publish a model</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap f-in">
+    <a class="logo" href="#top" data-cursor="hover"><img src="assets/img/ribes-logo-256.png" alt="Ribes logo" width="30" height="30"/><b>Ribes</b></a>
+    <div class="f-links">
+      <a href="#" data-cursor="hover">Docs</a><a href="#" data-cursor="hover">SDK</a><a href="#security" data-cursor="hover">Security</a><a href="#developers" data-cursor="hover">Publishers</a><a href="#" data-cursor="hover">Contact</a>
+    </div>
+    <a class="to-top magnetic" href="#top" aria-label="Back to top" data-cursor="hover"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="16" height="16"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></svg></span></a>
+    <div class="f-cp">© 2026 RIBES LABS — LOCAL AI, DISTRIBUTED PROPERLY. YOUR GPU, YOUR DATA.</div>
+  </div>
+  <div class="f-giant" aria-hidden="true">RIBES</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
